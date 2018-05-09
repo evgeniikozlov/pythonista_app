@@ -12,7 +12,7 @@ class CalculationApp:
 
     def calculate_pressed(self, sender):
         result = self.calculate_results()
-        self.result_textfield.text = result
+        self.result_textfield.text = str(result)
 
     def switch_pressed(self, sender):
         pass
@@ -28,31 +28,37 @@ class CalculationApp:
 
     def generate_height(self):
         self.row_count = 0
-        self.row_height = 10
+        self.row_height = 50
         while True:
-            yield 5 + self.row_count * self.row_height
+            yield 50 + self.row_count * self.row_height
             self.row_count += 1
 
     def __init__(self):
         self.inputs = {}
 
         view = ui.View(frame=(0, 0, 700, 500), name='Расчет укрытий', background_color='white')
-        height = self.generate_height()
+        height_gen = self.generate_height()
         start_column = 30
 
         for content in self.content_map:
             label = ui.Label(text=content["header"])
-            label.center = (start_column, next(height))
+            label.center = (start_column, next(height_gen))
             view.add_subview(label)
             for option in content["options"]:
-                switch = ui.Switch(value=False, name="{}_{}".format(content["header"], option), action=self.switch_pressed)
-                switch.center = (start_column, next(height))
+                height = next(height_gen)
+                switch = ui.Switch(value=False,
+                                   name="{}_{}".format(content["header"], option),
+                                   action=self.switch_pressed,
+                                   frame=(start_column, height, 30, 30))
                 view.add_subview(switch)
-                textfield = ui.TextField(enabled=True, name="{}_{}".format(content["header"], option))
-                textfield.center = (start_column + 50, next(height))
+
+                textfield = ui.TextField(enabled=True,
+                                         name="{}_{}".format(content["header"], option),
+                                         frame=(start_column+50, height, 30, 30))
                 view.add_subview(textfield)
-                label = ui.Label(text=option)
-                label.center = (start_column + 100, next(height))
+
+                label = ui.Label(text=option,
+                                 frame=(start_column + 100, height, 100, 30))
                 view.add_subview(label)
         button = ui.Button(title='Расчет')
         button.center = (500, 50)
