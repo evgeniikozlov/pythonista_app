@@ -1,7 +1,7 @@
 import ui, dialogs, datetime
 
 
-class CalculationApp:
+class CalculationApp(ui.View):
     content_map = [{
         "header": "group 1",
         "options": ["opt1", "opt2", "opt3"]
@@ -87,14 +87,18 @@ class CalculationApp:
         self.history = {}
 
         screen_width, screen_height = ui.get_screen_size()
-        view = ui.View(frame=(0, 0, screen_width, screen_height), name='Расчет укрытий', background_color='white')
+        self.frame = (0, 0, screen_width, screen_height)
+        self.name = 'Расчет укрытий'
+        self.background_color = 'white'
+
+
         height_gen = self.generate_height()
         scroll_view_width = screen_width * 2 / 3 - 10
         scroll_view = ui.ScrollView(frame=(10, 10, scroll_view_width, screen_height - 90),
                                     border_width=1,
                                     border_color="lightgrey",
                                     corner_radius=5)
-        view.add_subview(scroll_view)
+        self.add_subview(scroll_view)
 
         group_label_width = screen_width * 2 / 3 - 20
         option_label_width = screen_width * 2 / 3 - 130
@@ -140,14 +144,14 @@ class CalculationApp:
                                   flex="W")
         result_button.width = controls_width
         result_button.height = 50
-        view.add_subview(result_button)
+        self.add_subview(result_button)
 
         self.result_textfield = ui.TextField(enabled=True,
                                              name="result",
                                              text="",
                                              frame=(controls_x, 70, controls_width, 50),
                                              flex="W")
-        view.add_subview(self.result_textfield)
+        self.add_subview(self.result_textfield)
 
         clear_button = ui.Button(title='Очистить',
                                  frame=(controls_x, 180, controls_width, 50),
@@ -158,7 +162,7 @@ class CalculationApp:
                                  flex="W")
         clear_button.width = controls_width
         clear_button.height = 50
-        view.add_subview(clear_button)
+        self.add_subview(clear_button)
 
         history_button = ui.Button(title='История',
                                    frame=(controls_x, 240, controls_width, 50),
@@ -169,10 +173,9 @@ class CalculationApp:
                                    flex="W")
         history_button.width = controls_width
         history_button.height = 50
-        view.add_subview(history_button)
-
-        view.present('full_screen', orientations=['portrait'])
+        self.add_subview(history_button)
 
 
 if __name__ == "__main__":
     app = CalculationApp()
+    app.present('full_screen', orientations=[])
