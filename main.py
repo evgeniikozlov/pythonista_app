@@ -3,14 +3,14 @@ import ui, dialogs, datetime
 
 class CalculationApp:
     content_map = [{
-        "header": "group 1",
-        "options": ["opt1", "opt2", "opt3"]
+        "header": "На местности",
+        "options": ["В укрытии", "В землянке"]
     }, {
-        "header": "group 2",
-        "options": ["opt4", "opt5", "opt6"]
+        "header": "В технике",
+        "options": ["Автомобиль", "Танк", "Вертолет"]
     }, {
-        "header": "group 3",
-        "options": ["opt7", "opt8", "opt9"]
+        "header": "В городе",
+        "options": ["Жилой высотный дом", "Жилой малоэтажный дом"]
     }, {
         "header": "group 4",
         "options": ["opt7", "opt8", "opt9"]
