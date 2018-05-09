@@ -88,8 +88,10 @@ class CalculationApp:
 
         screen_width, screen_height = ui.get_screen_size()
         view = ui.View(frame=(0, 0, screen_width, screen_height), name='Расчет укрытий', background_color='white')
+        screen_height = view.height
         height_gen = self.generate_height()
-        scroll_view = ui.ScrollView(frame=(10, 10, screen_width * 2 / 3, screen_height - 20),
+        scroll_view_width = screen_width * 2 / 3 - 10
+        scroll_view = ui.ScrollView(frame=(10, 10, scroll_view_width, screen_height - 20),
                                     border_width=1,
                                     border_color="lightgrey",
                                     corner_radius=5)
@@ -125,25 +127,27 @@ class CalculationApp:
                                  frame=(130, height, option_label_width, 30))
                 scroll_view.add_subview(label)
 
-        scroll_view.content_size = (400, next(height_gen))
+        scroll_view.content_size = (scroll_view_width, next(height_gen))
 
         controls_x = screen_width * 2 / 3 + 10
         controls_width = screen_width * 1 / 3 - 20
 
         result_button = ui.Button(title='Расчет',
-                                  frame=(controls_x, 60, controls_width, 50),
+                                  frame=(controls_x, 10, controls_width, 50),
                                   border_width=1,
                                   border_color="lightgrey",
                                   corner_radius=5,
-                                  action=self.calculate_pressed)
+                                  action=self.calculate_pressed,
+                                  flex="H")
         result_button.width = controls_width
         result_button.height = 50
         view.add_subview(result_button)
 
         self.result_textfield = ui.TextField(enabled=True,
                                              name="result",
-                                             text="empty",
-                                             frame=(controls_x, 120, controls_width, 50))
+                                             text="",
+                                             frame=(controls_x, 70, controls_width, 50),
+                                             flex="H")
         view.add_subview(self.result_textfield)
 
         clear_button = ui.Button(title='Очистить',
@@ -151,17 +155,19 @@ class CalculationApp:
                                  border_width=1,
                                  border_color="lightgrey",
                                  corner_radius=5,
-                                 action=self.clear_inputs)
+                                 action=self.clear_inputs,
+                                 flex="H")
         clear_button.width = controls_width
         clear_button.height = 50
         view.add_subview(clear_button)
 
         history_button = ui.Button(title='История',
-                                   frame=(controls_x, 240, controls_width, 50),
+                                   frame=(controls_x, 2400, controls_width, 50),
                                    border_width=1,
                                    border_color="lightgrey",
                                    corner_radius=5,
-                                   action=self.show_history)
+                                   action=self.show_history,
+                                   flex="H")
         history_button.width = controls_width
         history_button.height = 50
         view.add_subview(history_button)
