@@ -51,7 +51,7 @@ class CalculationApp:
                 "accessory_type": "detail_button"
             })
 
-        history = dialogs.list_dialog(title="История", items=items, multiple=False, tableview_accessory_button_tapped=self.testf)
+        history = dialogs.list_dialog(title="История", items=items, multiple=False)
         self.fill_inputs(history)
 
     def testf(self, tableview, section, row):
