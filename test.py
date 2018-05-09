@@ -22,7 +22,7 @@ class CalculationApp:
 
     def calculate_results(self):
         result = 0
-        for input_name, input in self.inputs.items():
+        for input in self.inputs.values():
             if not input.enabled:
                 input_value = 0
             else:
@@ -34,7 +34,8 @@ class CalculationApp:
         return result
 
     def clear_inputs(self, sender):
-        pass
+        for input in self.inputs.values():
+            input.text = ""
 
     def generate_height(self):
         self.row_count = 0
@@ -51,14 +52,15 @@ class CalculationApp:
         start_column = 20
         scroll_view = ui.ScrollView(frame=(10, 10, 400, 480),
                                     border_width=1,
-                                    border_color="grey",
-                                    corner_radius=5)
+                                    border_color="lightgrey",
+                                    corner_radius=5,
+                                    content_size=(400, 480))
         view.add_subview(scroll_view)
 
         for content in self.content_map:
             label = ui.Label(text=content["header"],
-                             font=('<system-bold>', 15),
-                             frame=(start_column, next(height_gen), 30, 100))
+                             font=('<system-bold>', 175),
+                             frame=(start_column, next(height_gen), 120, 30))
             scroll_view.add_subview(label)
 
             for option in content["options"]:
@@ -68,7 +70,7 @@ class CalculationApp:
                 switch = ui.Switch(value=False,
                                    name=name,
                                    action=self.switch_pressed,
-                                   frame=(start_column, height, 30, 30))
+                                   frame=(start_column, height, 50, 30))
                 scroll_view.add_subview(switch)
 
                 textfield = ui.TextField(enabled=True,
@@ -91,15 +93,19 @@ class CalculationApp:
                            action=self.calculate_pressed)
         view.add_subview(button)
 
-        button = ui.Button(title='Очистить')
-        button.center = (500, 150)
+        button = ui.Button(title='Очистить',
+                           frame=(500, 50, 40, 120),
+                           border_width=1,
+                           border_color="grey",
+                           corner_radius=5,
+                           action=self.clear_inputs)
         button.action = self.clear_inputs
         view.add_subview(button)
 
         self.result_textfield = ui.TextField(enabled=True,
                                              name="result",
                                              text="empty",
-                                             frame=(500, 250, 30, 120))
+                                             frame=(500, 250, 120, 50))
         view.add_subview(self.result_textfield)
 
         view.present('sheet')
