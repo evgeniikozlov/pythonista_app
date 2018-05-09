@@ -43,7 +43,16 @@ class CalculationApp:
         self.result_textfield.text = ""
 
     def show_history(self, sender):
-        history = dialogs.list_dialog(title="История", items=self.history, multiple=False)
+        # items_titles = ["{}: {}".format(date, result) for (date, result) in self.history.items()]
+        items = []
+        for date, result in self.history.items():
+            items.append({
+                "title": "{}: {}".format(date, result),
+                "accessory_type": "detail_button"
+            })
+
+        data_items = ui.ListDataSource(items=items)
+        history = dialogs.list_dialog(title="История", items=data_items, multiple=False)
         self.fill_inputs(history)
 
     def fill_inputs(self, history):
