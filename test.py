@@ -47,13 +47,15 @@ class CalculationApp:
         items = []
         for date, result in self.history.items():
             items.append({
-                "title": "{}: {}".format(date, result),
+                "title": "{}: {}".format(date.strftime("%Y-%m-%d %H:%M:%S"), result),
                 "accessory_type": "detail_button"
             })
 
-        data_items = ui.ListDataSource(items=items)
-        history = dialogs.list_dialog(title="История", items=data_items, multiple=False)
+        history = dialogs.list_dialog(title="История", items=items, multiple=False, tableview_accessory_button_tapped=self.testf)
         self.fill_inputs(history)
+
+    def testf(self, tableview, section, row):
+        dialogs.text_dialog(text="{}_{}_{}".format(tableview, section, row))
 
     def fill_inputs(self, history):
         if history is not None:
@@ -142,6 +144,12 @@ class CalculationApp:
         view.add_subview(history_button)
 
         view.present('full_screen')
+
+
+# class HistoryDialogDelegate():
+#     def tableview_accessory_button_tapped(self, scrollview):
+#         # You can use the content_offset attribute to determine the current scroll position
+#         pass
 
 
 if __name__ == "__main__":
