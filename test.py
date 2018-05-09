@@ -48,7 +48,6 @@ class CalculationApp:
     def fill_inputs(self, history):
         self.result_textfield.text = history
 
-
     def generate_height(self):
         self.row_count = 0
         self.row_height = 40
@@ -69,14 +68,14 @@ class CalculationApp:
         scroll_view = ui.ScrollView(frame=(10, 10, 400, 480),
                                     border_width=1,
                                     border_color="lightgrey",
-                                    corner_radius=5,
-                                    superview=view)
+                                    corner_radius=5)
+        view.add_subview(scroll_view)
 
         for content in self.content_map:
             group_label = ui.Label(text=content["header"],
                                    font=('<system-bold>', 17),
-                                   frame=(start_column, next(height_gen), 120, 30),
-                                   superview=scroll_view)
+                                   frame=(start_column, next(height_gen), 120, 30))
+            scroll_view.add_subview(group_label)
 
             for option in content["options"]:
                 height = next(height_gen)
@@ -85,18 +84,19 @@ class CalculationApp:
                 switch = ui.Switch(value=False,
                                    name=name,
                                    action=self.switch_pressed,
-                                   frame=(start_column, height, 50, 30),
-                                   superview=scroll_view)
+                                   frame=(start_column, height, 50, 30))
+                scroll_view.add_subview(switch)
                 self.switches[name] = switch
 
                 textfield = ui.TextField(enabled=False,
                                          name=name,
-                                         frame=(start_column + 60, height, 50, 30),
-                                         superview=scroll_view)
+                                         frame=(start_column + 60, height, 50, 30))
+                scroll_view.add_subview(textfield)
                 self.textfields[name] = textfield
+
                 label = ui.Label(text=option,
-                                 frame=(start_column + 120, height, 100, 30),
-                                 superview=scroll_view)
+                                 frame=(start_column + 120, height, 100, 30))
+                scroll_view.add_subview(label)
 
         scroll_view.content_size = (400, next(height_gen))
 
@@ -105,29 +105,30 @@ class CalculationApp:
                                   border_width=1,
                                   border_color="lightgrey",
                                   corner_radius=5,
-                                  action=self.calculate_pressed,
-                                  superview=view)
+                                  action=self.calculate_pressed)
+        view.add_subview(result_button)
+
         clear_button = ui.Button(title='Очистить',
                                  frame=(500, 150, 180, 40),
                                  border_width=1,
                                  border_color="lightgrey",
                                  corner_radius=5,
-                                 action=self.clear_inputs,
-                                 superview=view)
+                                 action=self.clear_inputs)
+        view.add_subview(clear_button)
 
         self.result_textfield = ui.TextField(enabled=True,
                                              name="result",
                                              text="empty",
-                                             frame=(500, 250, 180, 40),
-                                             superview=view)
+                                             frame=(500, 250, 180, 40))
+        view.add_subview(self.result_textfield)
 
         history_button = ui.Button(title='История',
                                  frame=(500, 350, 180, 40),
                                  border_width=1,
                                  border_color="lightgrey",
                                  corner_radius=5,
-                                 action=self.show_history,
-                                 superview=view)
+                                 action=self.show_history)
+        view.add_subview(history_button)
 
         view.present('full_screen')
 
