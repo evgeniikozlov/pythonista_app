@@ -21,7 +21,10 @@ class CalculationApp:
         self.inputs[sender.name] = sender.text
 
     def calculate_results(self):
-        return 1
+        result = 0
+        for input_name, input in self.inputs.items():
+            result += input
+        return result
 
     def clear_inputs(self, sender):
         pass
@@ -38,28 +41,32 @@ class CalculationApp:
 
         view = ui.View(frame=(0, 0, 700, 500), name='Расчет укрытий', background_color='white')
         height_gen = self.generate_height()
-        start_column = 30
+        start_column = 20
+        scroll_view = ui.ScrollView(10, 10, 400, 480)
+        view.add_subview(scroll_view)
 
         for content in self.content_map:
-            label = ui.Label(text=content["header"])
-            label.center = (start_column, next(height_gen))
-            view.add_subview(label)
+            label = ui.Label(text=content["header"],
+                             font=('<system-bold>', 15),
+                             frame=(start_column, next(height_gen), 30, 100))
+            scroll_view.add_subview(label)
+
             for option in content["options"]:
                 height = next(height_gen)
                 switch = ui.Switch(value=False,
                                    name="{}_{}".format(content["header"], option),
                                    action=self.switch_pressed,
                                    frame=(start_column, height, 30, 30))
-                view.add_subview(switch)
+                scroll_view.add_subview(switch)
 
                 textfield = ui.TextField(enabled=True,
                                          name="{}_{}".format(content["header"], option),
-                                         frame=(start_column+50, height, 30, 30))
-                view.add_subview(textfield)
+                                         frame=(start_column + 60, height, 30, 50))
+                scroll_view.add_subview(textfield)
 
                 label = ui.Label(text=option,
-                                 frame=(start_column + 100, height, 100, 30))
-                view.add_subview(label)
+                                 frame=(start_column + 120, height, 100, 30))
+                scroll_view.add_subview(label)
         button = ui.Button(title='Расчет')
         button.center = (500, 50)
         button.action = self.calculate_pressed
