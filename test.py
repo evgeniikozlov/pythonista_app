@@ -11,6 +11,21 @@ class CalculationApp:
     }, {
         "header": "group 3",
         "options": ["opt7", "opt8", "opt9"]
+    }, {
+        "header": "group 4",
+        "options": ["opt7", "opt8", "opt9"]
+    }, {
+        "header": "group 5",
+        "options": ["opt7", "opt8", "opt9"]
+    }, {
+        "header": "group 6",
+        "options": ["opt7", "opt8", "opt9"]
+    }, {
+        "header": "group 7",
+        "options": ["opt7", "opt8", "opt9"]
+    }, {
+        "header": "group 8",
+        "options": ["opt7", "opt8", "opt9"]
     }]
 
     def calculate_pressed(self, sender):
@@ -43,23 +58,20 @@ class CalculationApp:
         self.result_textfield.text = ""
 
     def show_history(self, sender):
-        # items_titles = ["{}: {}".format(date, result) for (date, result) in self.history.items()]
         items = []
         for date, result in self.history.items():
             items.append({
                 "title": "{}: {}".format(date.strftime("%Y-%m-%d %H:%M:%S"), result),
-                "accessory_type": "detail_button"
             })
 
-        history = dialogs.list_dialog(title="История", items=items, multiple=False)
-        self.fill_inputs(history)
+        dialogs.list_dialog(title="История", items=items, multiple=False)
 
     def testf(self, tableview, section, row):
         dialogs.text_dialog(text="{}_{}_{}".format(tableview, section, row))
 
-    def fill_inputs(self, history):
-        if history is not None:
-            self.result_textfield.text = str(history)
+    # def fill_inputs(self, history):
+    #     if history is not None:
+    #         self.result_textfield.text = str(history)
 
     def generate_height(self):
         self.row_count = 0
@@ -77,17 +89,19 @@ class CalculationApp:
         screen_width, screen_height = ui.get_screen_size()
         view = ui.View(frame=(0, 0, screen_width, screen_height), name='Расчет укрытий', background_color='white')
         height_gen = self.generate_height()
-        start_column = 20
-        scroll_view = ui.ScrollView(frame=(10, 10, 400, 480),
+        scroll_view = ui.ScrollView(frame=(10, 10, screen_width * 2 / 3, screen_height - 20),
                                     border_width=1,
                                     border_color="lightgrey",
                                     corner_radius=5)
         view.add_subview(scroll_view)
 
+        group_label_width = screen_width * 2 / 3 - 20
+        option_label_width = screen_width * 2 / 3 - 130
+
         for content in self.content_map:
             group_label = ui.Label(text=content["header"],
                                    font=('<system-bold>', 17),
-                                   frame=(start_column, next(height_gen), 120, 30))
+                                   frame=(10, next(height_gen), group_label_width, 30))
             scroll_view.add_subview(group_label)
 
             for option in content["options"]:
@@ -97,59 +111,62 @@ class CalculationApp:
                 switch = ui.Switch(value=False,
                                    name=name,
                                    action=self.switch_pressed,
-                                   frame=(start_column, height, 50, 30))
+                                   frame=(10, height, 50, 30))
                 scroll_view.add_subview(switch)
                 self.switches[name] = switch
 
                 textfield = ui.TextField(enabled=False,
                                          name=name,
-                                         frame=(start_column + 60, height, 50, 30))
+                                         frame=(70, height, 50, 30))
                 scroll_view.add_subview(textfield)
                 self.textfields[name] = textfield
 
                 label = ui.Label(text=option,
-                                 frame=(start_column + 120, height, 100, 30))
+                                 frame=(130, height, option_label_width, 30))
                 scroll_view.add_subview(label)
 
         scroll_view.content_size = (400, next(height_gen))
 
+        controls_x = screen_width * 2 / 3 + 10
+        controls_width = screen_width * 1 / 3 - 20
+
         result_button = ui.Button(title='Расчет',
-                                  frame=(500, 50, 180, 40),
+                                  frame=(controls_x, 60, controls_width, 50),
                                   border_width=1,
                                   border_color="lightgrey",
                                   corner_radius=5,
                                   action=self.calculate_pressed)
+        result_button.width = controls_width
+        result_button.height = 50
         view.add_subview(result_button)
-
-        clear_button = ui.Button(title='Очистить',
-                                 frame=(500, 150, 180, 40),
-                                 border_width=1,
-                                 border_color="lightgrey",
-                                 corner_radius=5,
-                                 action=self.clear_inputs)
-        view.add_subview(clear_button)
 
         self.result_textfield = ui.TextField(enabled=True,
                                              name="result",
                                              text="empty",
-                                             frame=(500, 250, 180, 40))
+                                             frame=(controls_x, 120, controls_width, 50))
         view.add_subview(self.result_textfield)
 
-        history_button = ui.Button(title='История',
-                                 frame=(500, 350, 180, 40),
+        clear_button = ui.Button(title='Очистить',
+                                 frame=(controls_x, 180, controls_width, 50),
                                  border_width=1,
                                  border_color="lightgrey",
                                  corner_radius=5,
-                                 action=self.show_history)
+                                 action=self.clear_inputs)
+        clear_button.width = controls_width
+        clear_button.height = 50
+        view.add_subview(clear_button)
+
+        history_button = ui.Button(title='История',
+                                   frame=(controls_x, 240, controls_width, 50),
+                                   border_width=1,
+                                   border_color="lightgrey",
+                                   corner_radius=5,
+                                   action=self.show_history)
+        history_button.width = controls_width
+        history_button.height = 50
         view.add_subview(history_button)
 
         view.present('full_screen')
-
-
-# class HistoryDialogDelegate():
-#     def tableview_accessory_button_tapped(self, scrollview):
-#         # You can use the content_offset attribute to determine the current scroll position
-#         pass
 
 
 if __name__ == "__main__":
