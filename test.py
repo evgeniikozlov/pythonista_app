@@ -8,6 +8,9 @@ class CalculationApp:
     }, {
         "header": "group 2",
         "options": ["opt4", "opt5", "opt6"]
+    },{
+        "header": "group 3",
+        "options": ["opt7", "opt8", "opt9"]
     }]
 
     def calculate_pressed(self, sender):
@@ -15,15 +18,19 @@ class CalculationApp:
         self.result_textfield.text = str(result)
 
     def switch_pressed(self, sender):
-        pass
-
-    def textfield_changed(self, sender):
-        self.inputs[sender.name] = sender.text
+        self.inputs[sender.name].enabled = sender.value
 
     def calculate_results(self):
         result = 0
         for input_name, input in self.inputs.items():
-            result += float(input)
+            if not input.enabled:
+                input_value = 0
+            else:
+                try:
+                    input_value = float(input.text)
+                except:
+                    input_value = 0
+            result += input_value
         return result
 
     def clear_inputs(self, sender):
@@ -43,7 +50,9 @@ class CalculationApp:
         height_gen = self.generate_height()
         start_column = 20
         scroll_view = ui.ScrollView(frame=(10, 10, 400, 480),
-                                    border_width=2)
+                                    border_width=1,
+                                    border_color="grey",
+                                    corner_radius=5)
         view.add_subview(scroll_view)
 
         for content in self.content_map:
@@ -54,22 +63,32 @@ class CalculationApp:
 
             for option in content["options"]:
                 height = next(height_gen)
+                name = "{}_{}".format(content["header"], option)
+
                 switch = ui.Switch(value=False,
-                                   name="{}_{}".format(content["header"], option),
+                                   name=name,
                                    action=self.switch_pressed,
                                    frame=(start_column, height, 30, 30))
                 scroll_view.add_subview(switch)
 
                 textfield = ui.TextField(enabled=True,
-                                         name="{}_{}".format(content["header"], option),
-                                         frame=(start_column + 60, height, 50, 30),
-                                         action=self.textfield_changed)
+                                         name=name,
+                                         frame=(start_column + 60, height, 50, 30))
+                                         # action=self.textfield_changed)
                 scroll_view.add_subview(textfield)
 
                 label = ui.Label(text=option,
                                  frame=(start_column + 120, height, 100, 30))
                 scroll_view.add_subview(label)
-        button = ui.Button(title='Расчет', frame=(500, 50, 40, 80), border_width=2, action=self.calculate_pressed)
+
+                self.inputs[name] = textfield
+
+        button = ui.Button(title='Расчет',
+                           frame=(500, 50, 40, 120),
+                           border_width=1,
+                           border_color="grey",
+                           corner_radius=5,
+                           action=self.calculate_pressed)
         view.add_subview(button)
 
         button = ui.Button(title='Очистить')
@@ -77,8 +96,10 @@ class CalculationApp:
         button.action = self.clear_inputs
         view.add_subview(button)
 
-        self.result_textfield = ui.TextField(enabled=True, name="result", text="empty")
-        self.result_textfield.center = (500, 250)
+        self.result_textfield = ui.TextField(enabled=True,
+                                             name="result",
+                                             text="empty",
+                                             frame=(500, 250, 30, 120))
         view.add_subview(self.result_textfield)
 
         view.present('sheet')
