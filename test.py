@@ -88,10 +88,9 @@ class CalculationApp:
 
         screen_width, screen_height = ui.get_screen_size()
         view = ui.View(frame=(0, 0, screen_width, screen_height), name='Расчет укрытий', background_color='white')
-        screen_height = view.height
         height_gen = self.generate_height()
         scroll_view_width = screen_width * 2 / 3 - 10
-        scroll_view = ui.ScrollView(frame=(10, 10, scroll_view_width, screen_height - 20),
+        scroll_view = ui.ScrollView(frame=(10, 10, scroll_view_width, screen_height - 90),
                                     border_width=1,
                                     border_color="lightgrey",
                                     corner_radius=5)
@@ -138,7 +137,7 @@ class CalculationApp:
                                   border_color="lightgrey",
                                   corner_radius=5,
                                   action=self.calculate_pressed,
-                                  flex="H")
+                                  flex="W")
         result_button.width = controls_width
         result_button.height = 50
         view.add_subview(result_button)
@@ -147,7 +146,7 @@ class CalculationApp:
                                              name="result",
                                              text="",
                                              frame=(controls_x, 70, controls_width, 50),
-                                             flex="H")
+                                             flex="W")
         view.add_subview(self.result_textfield)
 
         clear_button = ui.Button(title='Очистить',
@@ -156,23 +155,23 @@ class CalculationApp:
                                  border_color="lightgrey",
                                  corner_radius=5,
                                  action=self.clear_inputs,
-                                 flex="H")
+                                 flex="W")
         clear_button.width = controls_width
         clear_button.height = 50
         view.add_subview(clear_button)
 
         history_button = ui.Button(title='История',
-                                   frame=(controls_x, 2400, controls_width, 50),
+                                   frame=(controls_x, 240, controls_width, 50),
                                    border_width=1,
                                    border_color="lightgrey",
                                    corner_radius=5,
                                    action=self.show_history,
-                                   flex="H")
+                                   flex="W")
         history_button.width = controls_width
         history_button.height = 50
         view.add_subview(history_button)
 
-        view.present('full_screen')
+        view.present('full_screen', orientations=['portrait'])
 
 
 if __name__ == "__main__":
