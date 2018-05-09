@@ -1,4 +1,4 @@
-import ui, dialogs
+import ui, dialogs, datetime
 
 
 class CalculationApp:
@@ -15,7 +15,7 @@ class CalculationApp:
 
     def calculate_pressed(self, sender):
         result = self.calculate_results()
-        self.history.append(result)
+        self.history[datetime.datetime.now()] = result
         self.result_textfield.text = str(result)
 
     def switch_pressed(self, sender):
@@ -37,6 +37,7 @@ class CalculationApp:
     def clear_inputs(self, sender):
         for input in self.textfields.values():
             input.text = ""
+            input.enabled = False
         for switch in self.switches.values():
             switch.value = False
         self.result_textfield.text = ""
@@ -46,7 +47,8 @@ class CalculationApp:
         self.fill_inputs(history)
 
     def fill_inputs(self, history):
-        self.result_textfield.text = history
+        if history is not None:
+            self.result_textfield.text = str(history)
 
     def generate_height(self):
         self.row_count = 0
@@ -59,7 +61,7 @@ class CalculationApp:
     def __init__(self):
         self.textfields = {}
         self.switches = {}
-        self.history = []
+        self.history = {}
 
         screen_width, screen_height = ui.get_screen_size()
         view = ui.View(frame=(0, 0, screen_width, screen_height), name='Расчет укрытий', background_color='white')
