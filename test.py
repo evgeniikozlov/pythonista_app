@@ -37,19 +37,21 @@ class CalculationApp:
         self.inputs = {}
 
         view = ui.View(frame=(0, 0, 500, 500), name='Расчет укрытий', background_color='white')
+        height = self.generate_height()
+
         for content in self.content_map:
             label = ui.Label(text=content["header"])
-            label.center = (5, self.generate_height())
+            label.center = (5, next(height))
             view.add_subview(label)
             for option in content["options"]:
                 switch = ui.Switch(value=False, name="{}_{}".format(content["header"], option), action=self.switch_pressed)
-                switch.center = (5, self.generate_height())
+                switch.center = (5, next(height))
                 view.add_subview(switch)
                 textfield = ui.TextField(enabled=True, name="{}_{}".format(content["header"], option))
-                textfield.center = (20, self.generate_height())
+                textfield.center = (20, next(height))
                 view.add_subview(textfield)
                 label = ui.Label(text=option)
-                label.center = (50, self.generate_height())
+                label.center = (50, next(height))
                 view.add_subview(label)
         button = ui.Button(title='Расчет')
         button.center = (200, 5)
