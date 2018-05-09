@@ -39,9 +39,10 @@ class CalculationApp:
 
     def generate_height(self):
         self.row_count = 0
-        self.row_height = 50
+        self.row_height = 40
+        self.row_start = 20
         while True:
-            yield 50 + self.row_count * self.row_height
+            yield self.row_start + self.row_count * self.row_height
             self.row_count += 1
 
     def __init__(self):
@@ -53,13 +54,12 @@ class CalculationApp:
         scroll_view = ui.ScrollView(frame=(10, 10, 400, 480),
                                     border_width=1,
                                     border_color="lightgrey",
-                                    corner_radius=5,
-                                    content_size=(400, 480))
+                                    corner_radius=5)
         view.add_subview(scroll_view)
 
         for content in self.content_map:
             label = ui.Label(text=content["header"],
-                             font=('<system-bold>', 175),
+                             font=('<system-bold>', 17),
                              frame=(start_column, next(height_gen), 120, 30))
             scroll_view.add_subview(label)
 
@@ -73,10 +73,9 @@ class CalculationApp:
                                    frame=(start_column, height, 50, 30))
                 scroll_view.add_subview(switch)
 
-                textfield = ui.TextField(enabled=True,
+                textfield = ui.TextField(enabled=False,
                                          name=name,
                                          frame=(start_column + 60, height, 50, 30))
-                                         # action=self.textfield_changed)
                 scroll_view.add_subview(textfield)
 
                 label = ui.Label(text=option,
@@ -84,28 +83,28 @@ class CalculationApp:
                 scroll_view.add_subview(label)
 
                 self.inputs[name] = textfield
+        scroll_view.content_size = (400, next(height_gen))
 
         button = ui.Button(title='Расчет',
-                           frame=(500, 50, 40, 120),
+                           frame=(500, 50, 180, 40),
                            border_width=1,
-                           border_color="grey",
+                           border_color="lightgrey",
                            corner_radius=5,
                            action=self.calculate_pressed)
         view.add_subview(button)
 
         button = ui.Button(title='Очистить',
-                           frame=(500, 50, 40, 120),
+                           frame=(500, 150, 180, 40),
                            border_width=1,
-                           border_color="grey",
+                           border_color="lightgrey",
                            corner_radius=5,
                            action=self.clear_inputs)
-        button.action = self.clear_inputs
         view.add_subview(button)
 
         self.result_textfield = ui.TextField(enabled=True,
                                              name="result",
                                              text="empty",
-                                             frame=(500, 250, 120, 50))
+                                             frame=(500, 250, 180, 40))
         view.add_subview(self.result_textfield)
 
         view.present('sheet')
